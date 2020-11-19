@@ -30,8 +30,8 @@ type packageFilter func(string, *ast.Package) bool
 
 // filteredPackages filters the parsed packages and then makes sure there is only
 // one left.
-func parseAndFilterPackages(path string, filter packageFilter) (pkg *ast.Package, fsetr *token.FileSet, err error) {
-	fset := token.NewFileSet()
+func parseAndFilterPackages(path string, filter packageFilter) (pkg *ast.Package, fset *token.FileSet, err error) {
+	fset = token.NewFileSet()
 	srcDir, err := DefaultGoPath.Abs(path)
 	if err != nil {
 		return nil, fset, err
