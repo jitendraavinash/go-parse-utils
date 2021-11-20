@@ -10,7 +10,6 @@ import (
 	"go/types"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 )
 
@@ -144,35 +143,35 @@ func (i *Importer) ImportFromWithFilters(path, srcDir string, mode types.ImportM
 	}
 
 	// If it's not on the GOPATH use the default importer instead
-	useDefaultImporter := true
-	for _, p := range DefaultGoPath {
-		if strings.HasPrefix(root, p) {
-			useDefaultImporter = false
-			break
-		}
-	}
+	// useDefaultImporter := true
+	// for _, p := range DefaultGoPath {
+	// 	if strings.HasPrefix(root, p) {
+	// 		useDefaultImporter = false
+	// 		break
+	// 	}
+	// }
 
-	if useDefaultImporter {
-		i.mut.Lock()
-		defer i.mut.Unlock()
+	// if useDefaultImporter {
+	// 	i.mut.Lock()
+	// 	defer i.mut.Unlock()
 
-		var pkg *types.Package
-		var err error
-		imp, ok := i.defaultImporter.(types.ImporterFrom)
-		if ok {
-			pkg, err = imp.ImportFrom(path, srcDir, mode)
-		} else {
-			pkg, err = imp.Import(path)
-		}
+	// 	var pkg *types.Package
+	// 	var err error
+	// 	imp, ok := i.defaultImporter.(types.ImporterFrom)
+	// 	if ok {
+	// 		pkg, err = imp.ImportFrom(path, srcDir, mode)
+	// 	} else {
+	// 		pkg, err = imp.Import(path)
+	// 	}
 
-		if err != nil {
-			return nil, err
-		}
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
 
-		i.cache[path] = pkg
+	// 	i.cache[path] = pkg
 
-		return pkg, nil
-	}
+	// 	return pkg, nil
+	// }
 
 	pkg, err := i.ParseSourceFiles(root, files)
 	if err != nil {
