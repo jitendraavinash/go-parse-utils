@@ -3,6 +3,7 @@ package parseutil
 import (
 	"errors"
 	"go/ast"
+	"go/build"
 	"go/parser"
 	"go/token"
 	"strings"
@@ -32,12 +33,16 @@ type packageFilter func(string, *ast.Package) bool
 // one left.
 func parseAndFilterPackages(path string, filter packageFilter) (pkg *ast.Package, fset *token.FileSet, err error) {
 	fset = token.NewFileSet()
-	srcDir, err := DefaultGoPath.Abs(path)
-	if err != nil {
-		return nil, fset, err
-	}
+	// srcDir, err := DefaultGoPath.Abs(path)
+	// if err != nil {
+	// 	return nil, fset, err
+	// }
 
-	pkgs, err := parser.ParseDir(fset, srcDir, nil, parser.ParseComments)
+	p, err := build.Import(path, "", 0)
+	if err != nil {
+		return nil, nil, err
+	}
+	pkgs, err := parser.ParseDir(fset, p.Dir, nil, parser.ParseComments)
 	if err != nil {
 		return nil, fset, err
 	}
